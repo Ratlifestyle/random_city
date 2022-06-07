@@ -6,7 +6,7 @@ import sqlite3
 
 import requests
 from Ville import Ville
-from calculDistance import deg2rad, distanceGPS, dms2dd
+from calculDistance import deg2rad, distanceGPS, bearingGPS
 
 def get_liste_villes(latA, longA, distance):
     conn = sqlite3.connect('data.sqlite')
@@ -17,9 +17,10 @@ def get_liste_villes(latA, longA, distance):
         longB = deg2rad(float(row[1]))
         latB = deg2rad(float(row[2]))
         codePostal = row[3]
-        distanceGps = distanceGPS(latA, longA, latB, longB) 
+        distanceGps = distanceGPS(latA, longA, latB, longB)
+        bearing = bearingGPS(latA, longA, latB, longB)
         if distanceGps <=distance*1000:
-            ville = Ville(nom, latB, latA, distanceGps, codePostal)
+            ville = Ville(nom, latB, latA, distanceGps, codePostal, bearing)
             liste_villes.append(ville)
     return liste_villes
 

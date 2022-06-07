@@ -2,15 +2,16 @@ import code
 
 
 class Ville:
-    def __init__(self, nom, latitude, longitude, distance, codePostal):
+    def __init__(self, nom, latitude, longitude, distance, codePostal, bearing):
         self.nom = nom
         self.latitude = latitude
         self.longitude = longitude
         self.distance = distance
         self.codePostal = codePostal
+        self.bearing = bearing
 
     def __str__(self) -> str:
-        return "nom : " + str(self.nom) + " latitude : " + str(self.latitude) + " longitude : " + str(self.longitude) 
+        return "nom : " + str(self.nom) + " latitude : " + str(self.latitude) + " longitude : " + str(self.longitude)  + " bearing : " + str(self.bearing)
 
     def __repr__(self) -> str:
         return str(self)
@@ -21,5 +22,6 @@ class Ville:
             "distance" : self.distance/1000,
             "latitude" : self.latitude,
             "longitude" : self.longitude,
-            "codePostal" : self.codePostal
+            "codePostal" : self.codePostal,
+            "bearing" : self.bearing
         }

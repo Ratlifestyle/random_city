@@ -1,4 +1,4 @@
-from math import sin, cos, acos, pi
+from math import sin, cos, acos, pi, atan2
  
 #############################################################################
 def dms2dd(d, m, s):
@@ -41,6 +41,12 @@ def distanceGPS(latA, longA, latB, longB):
     return S*RT
  
 #############################################################################
+def bearingGPS(latA, longA, latB, longB):
+    x = cos(latB)*sin(abs(latA-latB))
+    y = cos(latA)*sin(latB)-sin(latA)*cos(latB)*cos(abs(latA-latB))
+    bearing = atan2(x, y)
+    return bearing
+
 if __name__ == "__main__":
  
     # cooordonnées GPS en radians du 1er point (ici, mairie de Tours)
