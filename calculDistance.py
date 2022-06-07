@@ -44,7 +44,7 @@ def distanceGPS(latA, longA, latB, longB):
 def bearingGPS(latA, longA, latB, longB):
     x = cos(latB)*sin(abs(latA-latB))
     y = cos(latA)*sin(latB)-sin(latA)*cos(latB)*cos(abs(latA-latB))
-    bearing = atan2(x, y)
+    bearing = rad2deg(atan2(x, y))
     return bearing
 
 if __name__ == "__main__":
