@@ -1,7 +1,7 @@
 import random
 import sqlite3
 import requests
-from random_city.Ville import Ville
+from random_city.models.Ville import Ville
 from random_city.calculDistance import deg2rad, distanceGPS
 from random_city.proxies import proxies
 

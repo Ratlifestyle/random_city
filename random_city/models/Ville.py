@@ -4,6 +4,7 @@ from random_city.database import Base
 
 class Ville(Base):
 
+    __tablename__ = "Ville"
     ville_id = Column(Integer, primary_key=True)
     name = Column(Text)
     latitude = Column(Numeric)

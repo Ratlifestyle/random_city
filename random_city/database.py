@@ -12,4 +12,5 @@ Base.query = db_session.query_property()
 def init_db():
     import random_city.models.User
     import random_city.models.Session
+    import random_city.models.Ville
     Base.metadata.create_all(bind=engine)
