@@ -3,11 +3,10 @@ import random
 import re
 from select import select
 import sqlite3
-
 import requests
-from Ville import Ville
-from calculDistance import deg2rad, distanceGPS, bearingGPS
-
+from random_city.Ville import Ville
+from random_city.calculDistance import deg2rad, distanceGPS, bearingGPS
+from random_city.proxies import proxies
 def get_liste_villes(latA, longA, distance):
     conn = sqlite3.connect('data.sqlite')
     cursor = conn.execute("select ville_nom, ville_longitude_deg, ville_latitude_deg, ville_code_postal from villes_france_free")
@@ -30,9 +29,11 @@ def getRandomCity(latitude, longitude, distance):
     liste_villes = get_liste_villes(latitude, longitude, distance)
     return random.choice(liste_villes)
 
+
+
 def getRandomStreet(city, postCode):
     query = {'q' : city, 'type' : 'street', 'limit' : 100, 'autocomplete' : 1, 'postcode' : postCode}
-    response = requests.get("https://api-adresse.data.gouv.fr/search/", params=query)
+    response = requests.get("https://api-adresse.data.gouv.fr/search/", params=query, proxies=proxies)
     print(response.json())
     result = response.json()['features']
     return random.choice(result)

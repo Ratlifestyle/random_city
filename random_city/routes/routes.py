@@ -1,7 +1,6 @@
-from flask import Flask, jsonify, request
-from randomCityGenerator import getRandomCity, getRandomStreet
-
-app = Flask(__name__)
+from flask import jsonify, request
+from random_city import app
+from random_city.randomCityGenerator import getRandomCity, getRandomStreet
 
 @app.route("/city", methods=['GET'])
 def city():
@@ -10,7 +9,7 @@ def city():
         longitude = float(request.args['longitude'])
         if 'distance' in request.args:
             distance = float(request.args['distance'])
-        else:
+        else:   
             distance = 50
         return jsonify(getRandomCity(latitude, longitude, distance).to_dic())
     else:
@@ -24,6 +23,3 @@ def street():
         return jsonify(getRandomStreet(city=city, postCode=postCode))
     else:
         print("error /street")
-
-if __name__ == "__main__":
-    app.run(debug=True)
