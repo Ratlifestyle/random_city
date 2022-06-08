@@ -7,7 +7,6 @@ from flask import jsonify, Response
 
 @app.route("/user", methods=['GET'])
 def getAllUsers():
-    u = User("test", "test", "test", "test")
     users = User.query.all()
     return jsonify(result = [user.to_dict() for user in users])
 

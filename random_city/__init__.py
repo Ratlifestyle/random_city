@@ -11,3 +11,4 @@ def shutdown_session(exception=None):
 
 import random_city.routes.routes
 import random_city.routes.UserController
+import random_city.routes.SessionController

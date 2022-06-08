@@ -1,14 +1,16 @@
 from sqlalchemy import Column, Integer, Text
+from sqlalchemy.orm import relationship
 from random_city.database import Base
 
 class User(Base):
 
     __tablename__ = 'User'
-    user_id = Column(Integer, primary_key= True, )
+    user_id = Column(Integer, primary_key= True)
     first_name = Column(Text)
     last_name = Column(Text)
     login = Column(Text)
     password = Column(Text)
+    sessions = relationship("Session", back_populates="user")
 
     def __init__(self, first_name=None, last_name=None, login=None, password=None, user_id=None):
         self.first_name = first_name
@@ -25,5 +27,6 @@ class User(Base):
             "user_id" : self.user_id,
             "first_name" : self.first_name,
             "last_name" : self.last_name,
-            "login" : self.login 
+            "login" : self.login ,
+            "sessions" : [session.to_dict() for session in self.sessions]
         }

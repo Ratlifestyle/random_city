@@ -1,12 +1,10 @@
-import math
 import random
-import re
-from select import select
 import sqlite3
 import requests
 from random_city.Ville import Ville
-from random_city.calculDistance import deg2rad, distanceGPS, bearingGPS
+from random_city.calculDistance import deg2rad, distanceGPS
 from random_city.proxies import proxies
+
 def get_liste_villes(latA, longA, distance):
     conn = sqlite3.connect('data.sqlite')
     cursor = conn.execute("select ville_nom, ville_longitude_deg, ville_latitude_deg, ville_code_postal from villes_france_free")
@@ -17,9 +15,8 @@ def get_liste_villes(latA, longA, distance):
         latB = deg2rad(float(row[2]))
         codePostal = row[3]
         distanceGps = distanceGPS(latA, longA, latB, longB)
-        bearing = bearingGPS(latA, longA, latB, longB)
-        if distanceGps <=distance*1000:
-            ville = Ville(nom, latB, latA, distanceGps, codePostal, bearing)
+        if distanceGps <= distance*1000:
+            ville = Ville(nom, latB, latA, distanceGps, codePostal)
             liste_villes.append(ville)
     return liste_villes
 
