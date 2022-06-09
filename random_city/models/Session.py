@@ -10,7 +10,7 @@ class Session(Base):
     result = Column(Integer)
     fk_user_id = Column(Integer, ForeignKey("User.user_id"), nullable=False)
     user = relationship("User", back_populates="sessions")
-    villes = relationship("Ville", back_populates="sessions")
+    villes = relationship("Ville", back_populates="session")
 
     def __init__(self, fk_user_id, is_active=0, duree = "0", result=0):
         self.is_active = is_active

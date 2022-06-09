@@ -8,7 +8,7 @@ init_db()
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
-
-import random_city.routes.routes
+    
 import random_city.routes.UserController
 import random_city.routes.SessionController
+import random_city.routes.VilleController

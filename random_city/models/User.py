@@ -8,7 +8,7 @@ class User(Base):
     user_id = Column(Integer, primary_key= True)
     first_name = Column(Text)
     last_name = Column(Text)
-    login = Column(Text)
+    login = Column(Text, unique=True)
     password = Column(Text)
     sessions = relationship("Session", back_populates="user")
 

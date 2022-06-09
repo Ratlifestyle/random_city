@@ -1,3 +1,4 @@
+from crypt import methods
 from itsdangerous import json
 from requests import request
 from random_city import app
@@ -30,3 +31,12 @@ def addUser():
     else:
         status_code = Response(status=500)
         return status_code
+
+@app.route('/user/login', methods=['POST'])
+def login():
+    if 'login' in request.form and 'password' in request.form:
+        user = User.query.filter_by(login=request.form['login'], password=request.form['password']).first()
+        if user!=None:
+            return jsonify(user.to_dict())
+        else:
+            return Response(status_code=400)

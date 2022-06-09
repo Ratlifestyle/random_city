@@ -16,7 +16,7 @@ def get_liste_villes(latA, longA, distance):
         codePostal = row[3]
         distanceGps = distanceGPS(latA, longA, latB, longB)
         if distanceGps <= distance*1000:
-            ville = Ville(nom, latB, latA, distanceGps, codePostal)
+            ville = Ville(nom, latB, latA, distanceGps, codePostal, None, None)
             liste_villes.append(ville)
     return liste_villes
 
@@ -28,8 +28,10 @@ def getRandomCity(latitude, longitude, distance):
 
 
 
-def getRandomStreet(city, postCode):
-    query = {'q' : city, 'type' : 'street', 'limit' : 100, 'autocomplete' : 1, 'postcode' : postCode}
+def getRandomStreet(city : Ville):
+    cityName = city.name
+    postCode = city.codePostal 
+    query = {'q' : cityName, 'type' : 'street', 'limit' : 100, 'autocomplete' : 1, 'postcode' : postCode}
     response = requests.get("https://api-adresse.data.gouv.fr/search/", params=query, proxies=proxies)
     print(response.json())
     result = response.json()['features']
