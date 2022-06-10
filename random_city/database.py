@@ -13,4 +13,6 @@ def init_db():
     import random_city.models.User
     import random_city.models.Session
     import random_city.models.Ville
+    import random_city.models.DeviceLocation
+    import random_city.models.DeviceLocationHistory
     Base.metadata.create_all(bind=engine)

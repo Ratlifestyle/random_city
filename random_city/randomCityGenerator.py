@@ -26,8 +26,6 @@ def getRandomCity(latitude, longitude, distance):
     liste_villes = get_liste_villes(latitude, longitude, distance)
     return random.choice(liste_villes)
 
-
-
 def getRandomStreet(city : Ville):
     cityName = city.name
     postCode = city.codePostal 

@@ -4,3 +4,4 @@ proxies.py
 random_city/__pycache__
 random_city/models/__pycache__
 random_city/routes/__pycache__
+__pycache__
