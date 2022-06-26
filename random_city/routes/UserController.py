@@ -1,5 +1,3 @@
-from crypt import methods
-from itsdangerous import json
 from requests import request
 from random_city import app
 from random_city.models.User import User
