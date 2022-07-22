@@ -19,9 +19,7 @@ def getUserById(id):
 
 @app.route('/user/register', methods=['POST'])
 def addUser():
-    print("ajout d user")
     request_data = json.loads(request.get_data())
-    print(request_data)
 
     if 'first_name' in request_data and 'last_name' in request_data and 'login' in request_data \
     and 'password' in request_data and 'mail' in request_data and 'pseudo' in request_data:
@@ -42,21 +40,22 @@ def addUser():
 
 @app.route('/user/login', methods=['POST'])
 def login():
-    request_data = request.get_json()
-    if 'login' in request_data and 'password' in request:
+    request_data = json.loads(request.get_data())
+    if 'login' in request_data and 'password' in request_data:
         user = User.query.filter_by(login=request_data['login'], password=request_data['password']).first()
         if user!=None:
             return jsonify(user.to_dict())
         else:
-            return Response(status_code=400)
+            return Response(status=403)
+    else:
+        return Response(status=400)
 
 @app.route('/user/validPseudo/<pseudo>', methods=['GET'])
 def validPseudo(pseudo):
     if User.query.filter_by(pseudo = pseudo).first() is not None:
         Response = app.response_class(
             response=json.dumps({ 
-            "result": "aaa",
-            "TEST": 'OK' 
+            "result": False,
             }),
             status=200,
             mimetype="application/json"
@@ -65,8 +64,7 @@ def validPseudo(pseudo):
     else:
         Response = app.response_class(
             response=json.dumps({ 
-            "result": "aaa",
-            "TEST": 'OK' 
+            "result": True
             }),
             status=200,
             mimetype="application/json"
