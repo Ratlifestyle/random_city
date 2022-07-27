@@ -1,23 +1,22 @@
 import json
-
-from sqlalchemy import exists
-from random_city import app
 from random_city.models.User import User
-from random_city.database import db_session, init_db
-from flask import jsonify, Response, make_response, request
+from random_city import db
+from flask import Blueprint, jsonify, Response, make_response, request
 
 
-@app.route("/user", methods=['GET'])
+userBluePrint = Blueprint('UserBluePrint', __name__)
+
+@userBluePrint.route("/user", methods=['GET'])
 def getAllUsers():
     users = User.query.all()
     return jsonify(result = [user.to_dict() for user in users])
 
-@app.route('/user/<id>', methods=['GET'])
+@userBluePrint.route('/user/<id>', methods=['GET'])
 def getUserById(id):
     user = User.query.get(id)        
     return jsonify(user.to_dict())
 
-@app.route('/user/register', methods=['POST'])
+@userBluePrint.route('/user/register', methods=['POST'])
 def addUser():
     request_data = json.loads(request.get_data())
     if 'first_name' in request_data and 'last_name' in request_data \
@@ -31,8 +30,8 @@ def addUser():
                 mail = request_data['mail']
                 pseudo = request_data['pseudo']
                 user = User(first_name, last_name, password, mail, pseudo)
-                db_session.add(user)
-                db_session.commit()
+                db.session.add(user)
+                db.session.commit()
                 auth_token = user.encode_auth_token(user.user_id)
                 responseObject = {
                     'status': 'success',
@@ -64,7 +63,7 @@ def addUser():
             }
         return make_response(jsonify(responseObject)), 401
 
-@app.route('/user/login', methods=['POST'])
+@userBluePrint.route('/user/login', methods=['POST'])
 def login():
     request_data = json.loads(request.get_data())
     if 'mail' in request_data and 'password' in request_data:
@@ -76,23 +75,17 @@ def login():
     else:
         return Response(status=400)
 
-@app.route('/user/validPseudo/<pseudo>', methods=['GET'])
+@userBluePrint.route('/user/validPseudo/<pseudo>', methods=['GET'])
 def validPseudo(pseudo):
     if User.query.filter_by(pseudo = pseudo).first() is not None:
-        Response = app.response_class(
-            response=json.dumps({ 
-            "result": False,
-            }),
-            status=200,
-            mimetype="application/json"
-        )
-        return Response
+        responseObject = {
+            'status': 'success',
+            'result': False
+        }
+        return make_response(jsonify(responseObject)), 200
     else:
-        Response = app.response_class(
-            response=json.dumps({ 
-            "result": True
-            }),
-            status=200,
-            mimetype="application/json"
-        )
-        return Response
+        responseObject = {
+            'status': 'success',
+            'result': True
+        }
+        return make_response(jsonify(responseObject)), 200

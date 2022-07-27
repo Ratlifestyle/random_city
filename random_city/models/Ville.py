@@ -1,8 +1,9 @@
 from sqlalchemy import Column, ForeignKey, Integer, Numeric, Text
 from sqlalchemy.orm import relationship
-from random_city.database import Base
+from random_city import db
 
-class Ville(Base):
+
+class Ville(db.Model):
 
     __tablename__ = "Ville"
     ville_id = Column(Integer, primary_key=True)

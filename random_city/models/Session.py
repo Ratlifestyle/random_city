@@ -1,10 +1,11 @@
 from sqlalchemy import Column, ForeignKey, Integer, Text
 from sqlalchemy.orm import relationship
-from random_city.database import Base
+from random_city import db
+from random_city.models.Ville import Ville
 
-class Session(Base):
+class Session(db.Model):
     __tablename__ = 'Session'
-    session_id = Column(Integer, primary_key= True)
+    session_id = Column(Integer, primary_key=True)
     is_active = Column(Integer)
     duree = Column(Text)
     result = Column(Integer)
@@ -12,7 +13,7 @@ class Session(Base):
     user = relationship("User", back_populates="sessions")
     villes = relationship("Ville", back_populates="session")
 
-    def __init__(self, fk_user_id, is_active=0, duree = "0", result=0):
+    def __init__(self, fk_user_id, is_active=0, duree="0", result=0):
         self.is_active = is_active
         self.duree = duree
         self.result = result
@@ -20,10 +21,10 @@ class Session(Base):
 
     def to_dict(self):
         return {
-            "session_id" : self.session_id,
-            "is_active" : self.is_active,
-            "duree" : self.duree,
-            "result" : self.result,
-            "user" : self.fk_user_id,
-            "ville" : [ville.to_dict() for ville in self.villes]
+            "session_id": self.session_id,
+            "is_active": self.is_active,
+            "duree": self.duree,
+            "result": self.result,
+            "user": self.fk_user_id,
+            "ville": [ville.to_dict() for ville in self.villes]
         }

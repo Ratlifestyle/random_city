@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey
 from sqlalchemy.orm import relationship, backref
-from random_city.database import Base
+from random_city import db
 
-class DeviceLocation(Base):
+class DeviceLocation(db.Model):
     __tablename__ = "device_location"
     device_location_id = Column(Integer, primary_key=True)
     latitude = Column(Text)
