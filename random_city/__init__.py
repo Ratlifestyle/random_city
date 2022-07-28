@@ -21,5 +21,9 @@ from random_city.routes.UserController import userBluePrint
 
 app.register_blueprint(userBluePrint)
 
+from random_city.routes.VilleController import villeBluePrint
+
+app.register_blueprint(villeBluePrint)
+
 import random_city.errorsHandler.UserControllerErrorsHandler
 

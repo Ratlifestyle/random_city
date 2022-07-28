@@ -19,7 +19,7 @@ def get_liste_villes(latA, longA, distance):
             liste_villes.append(ville)
     return liste_villes
 
-def getRandomCity(latitude, longitude, distance):
+def getRandomCity(latitude, longitude, distance) -> Ville:
     latitude = deg2rad(latitude)
     longitude = deg2rad(longitude)
     liste_villes = get_liste_villes(latitude, longitude, distance)

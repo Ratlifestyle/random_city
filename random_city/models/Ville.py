@@ -31,7 +31,7 @@ class Ville(db.Model):
     def __repr__(self) -> str:
         return str(self)
 
-    def to_dic(self):
+    def to_dict(self):
         return {
             "name" : self.name,
             "distance" : self.distance/1000,

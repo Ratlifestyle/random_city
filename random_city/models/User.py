@@ -28,20 +28,22 @@ class User(db.Model):
     def __repr__(self) -> str:
         return f'<User {self.first_name!r}, {self.last_name!r}, {self.mail!r}>'
 
-    def encode_auth_token(self, user_id):
-        try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=3600),
-                'iat': datetime.datetime.utcnow(),
-                'sub': user_id
-            }
-            return jwt.encode(
-                payload,
-                os.getenv('SECRET_KEY'),  # a modifier dans un fichier de config
-                algorithm='HS256'
-            )
-        except Exception as e:
-            return e
+    def encode_auth_token(self):
+        if(self.user_id!=None):
+            try:
+                payload = {
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=3600), #definir un temps convenable genre 24h ou 1 semaine
+                    'iat': datetime.datetime.utcnow(),
+                    'sub': self.user_id
+                }
+                return jwt.encode(
+                    payload,
+                    os.getenv('SECRET_KEY'),  # a modifier dans un fichier de config
+                    algorithm='HS256'
+                )
+            except Exception as e:
+                return e
+        return None
 
     @staticmethod
     def decode_auth_token(auth_token):

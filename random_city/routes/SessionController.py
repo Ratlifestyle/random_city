@@ -1,4 +1,3 @@
-from crypt import methods
 from requests import request
 from random_city import app, db
 from random_city.models.Session import Session

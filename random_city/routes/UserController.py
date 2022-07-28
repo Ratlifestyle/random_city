@@ -1,10 +1,11 @@
 import json
 from random_city.models.User import User
 from random_city import db
-from flask import Blueprint, jsonify, Response, make_response, request
-from sqlalchemy import or_
+from flask import Blueprint, jsonify, make_response, request
 from random_city.exceptions.ExistingUserException import ExistingUserException
 from random_city.exceptions.BadRequestException import BadRequestException
+
+
 userBluePrint = Blueprint('UserBluePrint', __name__)
 
 
@@ -36,16 +37,15 @@ def addUser():
                 user = User(first_name, last_name, password, mail, pseudo)
                 db.session.add(user)
                 db.session.commit()
-                auth_token = user.encode_auth_token(user.user_id)
+                auth_token = user.encode_auth_token()
                 responseObject = {
                     'status': 'success',
                     'message': 'Successfully registered',
                     'status_code': '201',
-                    'auth_token': User.decode_auth_token(auth_token)
+                    'auth_token': auth_token
                 }
                 return make_response(jsonify(responseObject)), 201
-            except Exception as e:
-                print(e)
+            except Exception:
                 responseObject = {
                     'status': 'fail',
                     'message': 'Some error occured . Please try again',
@@ -64,7 +64,22 @@ def login():
     if 'mail' in request_data and 'password' in request_data:
         user = User.query.filter_by(mail=request_data['mail'], password=request_data['password']).first()
         if user != None:
-            return jsonify(user.to_dict()), 200
+            try:
+                auth_token = user.encode_auth_token()
+                responseObject = {
+                    'status': 'success',
+                    'message': 'Successfully registered',
+                    'status_code': '200',
+                    'auth_token': auth_token
+                    }
+                return make_response(jsonify(responseObject)), 200
+            except Exception:
+                responseObject = {
+                    'status': 'fail',
+                    'message': 'Some error occured . Please try again',
+                    'status_code': '500',
+                }
+                return make_response(jsonify(responseObject)), 500
         else:
             raise BadRequestException('Bad Credentials. Please try again')
     else:
