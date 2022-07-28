@@ -2,26 +2,30 @@ import json
 from random_city.models.User import User
 from random_city import db
 from flask import Blueprint, jsonify, Response, make_response, request
-
-
+from sqlalchemy import or_
+from random_city.exceptions.ExistingUserException import ExistingUserException
+from random_city.exceptions.BadRequestException import BadRequestException
 userBluePrint = Blueprint('UserBluePrint', __name__)
+
 
 @userBluePrint.route("/user", methods=['GET'])
 def getAllUsers():
     users = User.query.all()
-    return jsonify(result = [user.to_dict() for user in users])
+    return jsonify(result=[user.to_dict() for user in users])
+
 
 @userBluePrint.route('/user/<id>', methods=['GET'])
 def getUserById(id):
-    user = User.query.get(id)        
+    user = User.query.get(id)
     return jsonify(user.to_dict())
+
 
 @userBluePrint.route('/user/register', methods=['POST'])
 def addUser():
     request_data = json.loads(request.get_data())
     if 'first_name' in request_data and 'last_name' in request_data \
-    and 'password' in request_data and 'mail' in request_data and 'pseudo' in request_data:
-        user = User.query.filter_by(mail=request_data['mail']).first()
+            and 'password' in request_data and 'mail' in request_data and 'pseudo' in request_data:
+        user = User.query.filter((User.mail == request_data['mail']) | (User.pseudo == request_data['pseudo'])).first()
         if not user:
             try:
                 first_name = request_data['first_name']
@@ -45,39 +49,31 @@ def addUser():
                 responseObject = {
                     'status': 'fail',
                     'message': 'Some error occured . Please try again',
-                    'status_code': '401',
+                    'status_code': '500',
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(jsonify(responseObject)), 500
         else:
-            responseObject = {
-                'status': 'fail',
-                'message': 'User already exists. Please login',
-                'status_code': '409',
-            }
-            return make_response(jsonify(responseObject)), 409
+            raise ExistingUserException()
     else:
-        responseObject = {
-                'status': 'fail',
-                'message': 'Bad request. Please try again',
-                'status_code': '401',
-            }
-        return make_response(jsonify(responseObject)), 401
+        raise BadRequestException()
+
 
 @userBluePrint.route('/user/login', methods=['POST'])
 def login():
     request_data = json.loads(request.get_data())
     if 'mail' in request_data and 'password' in request_data:
-        user = User.query.filter_by(login=request_data['mail'], password=request_data['password']).first()
-        if user!=None:
-            return jsonify(user.to_dict())
+        user = User.query.filter_by(mail=request_data['mail'], password=request_data['password']).first()
+        if user != None:
+            return jsonify(user.to_dict()), 200
         else:
-            return Response(status=403)
+            raise BadRequestException('Bad Credentials. Please try again')
     else:
-        return Response(status=400)
+        raise BadRequestException()
+
 
 @userBluePrint.route('/user/validPseudo/<pseudo>', methods=['GET'])
 def validPseudo(pseudo):
-    if User.query.filter_by(pseudo = pseudo).first() is not None:
+    if User.query.filter_by(pseudo=pseudo).first() is not None:
         responseObject = {
             'status': 'success',
             'result': False

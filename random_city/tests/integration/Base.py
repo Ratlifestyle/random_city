@@ -1,5 +1,4 @@
 from flask_testing import TestCase
-
 from random_city import app, db
 
 
@@ -11,8 +10,9 @@ class BaseTestCase(TestCase):
         return app
 
     def setUp(self):
-        print('aaaa')
         db.create_all()
-        print('bbbbb')
         db.session.commit()
 
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()

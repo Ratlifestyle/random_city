@@ -20,5 +20,5 @@ class TestingConfig(BaseConfig):
     DEBUG = True
     TESTING = True
     BCRYPT_LOG_ROUNDS = 4
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///randomCityDbTest.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///tests/randomCityDbTest.db'
     PRESERVE_CONTEXT_ON_EXCEPTION = False

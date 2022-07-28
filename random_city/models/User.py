@@ -31,7 +31,7 @@ class User(db.Model):
     def encode_auth_token(self, user_id):
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=5),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=3600),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
@@ -46,11 +46,12 @@ class User(db.Model):
     @staticmethod
     def decode_auth_token(auth_token):
         try:
-            payload = jwt.decode(auth_token, os.getenv('SECRET_KEY'))
+            payload = jwt.decode(auth_token, os.getenv('SECRET_KEY'), 'HS256')
             return payload['sub']
         except jwt.ExpiredSignatureError:
             return 'Signature expired. Please log in again'
-        except jwt.InvalidTokenError:
+        except jwt.InvalidTokenError as e:
+            print(e)
             return 'Invalid token. Please log in again'
 
     def to_dict(self):
@@ -60,5 +61,6 @@ class User(db.Model):
             "last_name": self.last_name,
             "mail": self.mail,
             "pseudo": self.pseudo,
+            'password': self.password,
             "sessions": [session.to_dict() for session in self.sessions]
         }
