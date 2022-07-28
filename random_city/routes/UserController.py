@@ -71,7 +71,7 @@ def login():
                     'message': 'Successfully registered',
                     'status_code': '200',
                     'auth_token': auth_token
-                    }
+                }
                 return make_response(jsonify(responseObject)), 200
             except Exception:
                 responseObject = {

@@ -6,11 +6,15 @@ from flask_sqlalchemy import SQLAlchemy
 os.environ['SECRET_KEY'] = str(os.urandom(24))
 
 app = Flask(__name__)
-app.config.from_object(os.getenv('APP_SETTINGS', 'config.DevelopmentConfig'))
+app.config.from_object('config.DevelopmentConfig')
 CORS(app)
 
 db = SQLAlchemy(app)
 
+import random_city.models.User
+
+db.create_all()
+db.session.commit()
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
