@@ -13,16 +13,16 @@ class Ville(db.Model):
     distance = Column(Numeric)
     codePostal = Column(Integer)
     street = Column(Text)
-    fk_session_id = Column(Integer, ForeignKey("Session.session_id"))
-    session = relationship("Session", back_populates="villes")
+    fk_game_session_id = Column(Integer, ForeignKey("GameSession.game_session_id"))
+    game_session = relationship("GameSession", back_populates="villes")
 
-    def __init__(self, name, latitude, longitude, distance, codePostal, fk_session_id, street=None):
+    def __init__(self, name, latitude, longitude, distance, codePostal, fk_game_session_id, street=None):
         self.name = name
         self.latitude = latitude
         self.longitude = longitude
         self.distance = distance
         self.codePostal = codePostal
-        self.fk_session_id = fk_session_id
+        self.fk_game_session_id = fk_game_session_id
         self.street = street
 
     def __str__(self) -> str:
@@ -38,5 +38,5 @@ class Ville(db.Model):
             "latitude" : self.latitude,
             "longitude" : self.longitude,
             "codePostal" : self.codePostal,
-            "steet" : self.street
+            "street" : self.street
         }

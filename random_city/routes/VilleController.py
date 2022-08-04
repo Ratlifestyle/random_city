@@ -1,10 +1,11 @@
 from random_city import app, db
-from random_city.models.Session import Session
+from random_city.models.GameSession import GameSession
 from flask import Blueprint, jsonify, Response, request
 from random_city.randomCityGenerator import getRandomCity, getRandomStreet
 from random_city.models import Ville
 
 villeBluePrint = Blueprint('VilleBluePrint', __name__)
+
 
 @villeBluePrint.route('/ville', methods=['GET'])
 def getVille():
@@ -18,7 +19,7 @@ def getVille():
         else:   
             distance = 50
         ville = getRandomCity(latitude, longitude, distance).to_dict()
-        ville.fk_session_id = request.args['session_id']
+        ville.fk_session_id = request.args['game_session_id']
         ville.street = getRandomStreet(ville)
         db.add(ville)
         db.commit()

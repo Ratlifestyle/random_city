@@ -7,7 +7,7 @@ class DeviceLocationHistory(db.Model):
     device_location_history_id = Column(Integer, primary_key=True)
     latitude = Column(Text)
     longitude = Column(Text)
-    fk_session_id = Column(Integer, ForeignKey("Session.session_id"), nullable=False)
+    fk_game_session_id = Column(Integer, ForeignKey("GameSession.game_session_id"), nullable=False)
     recorded_on = Column(Text)
     #session = relationship("Session", backref=backref("device_location", use_list=False))
 

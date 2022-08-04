@@ -9,17 +9,21 @@ app = Flask(__name__)
 app.config.from_object('config.DevelopmentConfig')
 CORS(app)
 
-db = SQLAlchemy(app)
+engine_options = {
+    'echo': True
+}
+db = SQLAlchemy(app, engine_options=engine_options)
+#db = SQLAlchemy(app)
 
-import random_city.models.User
-
-db.create_all()
-db.session.commit()
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db.session.remove()
 
+
+from random_city.routes.GameSessionController import gameSessionBluePrint
+
+app.register_blueprint(gameSessionBluePrint)
 
 from random_city.routes.UserController import userBluePrint
 

@@ -1,21 +1,20 @@
 import datetime
 import jwt
 import os
-from enum import unique
-from sqlalchemy import Column, Integer, Text
+from sqlalchemy import Column, Text
 from sqlalchemy.orm import relationship
 from random_city import db
-from random_city.models.Session import Session
-
+from random_city.models.GameSession import GameSession
+from sqlalchemy.types import INTEGER
 class User(db.Model):
     __tablename__ = 'User'
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(INTEGER, primary_key=True)
     first_name = Column(Text)
     last_name = Column(Text)
     password = Column(Text)
     mail = Column(Text, unique=True)
     pseudo = Column(Text, unique=True)
-    sessions = relationship("Session", back_populates="user")
+    game_sessions = relationship("GameSession", back_populates="user")
 
     def __init__(self, first_name=None, last_name=None, password=None, mail=None, pseudo=None, user_id=None):
         self.first_name = first_name
@@ -64,5 +63,5 @@ class User(db.Model):
             "mail": self.mail,
             "pseudo": self.pseudo,
             'password': self.password,
-            "sessions": [session.to_dict() for session in self.sessions]
+            "sessions": [game_session.to_dict() for game_session in self.game_sessions]
         }
