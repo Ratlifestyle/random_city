@@ -13,7 +13,14 @@ engine_options = {
     'echo': True
 }
 db = SQLAlchemy(app, engine_options=engine_options)
-#db = SQLAlchemy(app)
+
+from random_city.models.User import User
+from random_city.models.GameSession import GameSession
+from random_city.models.Ville import Ville 
+
+db.create_all()
+db.session.commit()
+# db = SQLAlchemy(app)
 
 
 @app.teardown_appcontext
@@ -34,4 +41,3 @@ from random_city.routes.VilleController import villeBluePrint
 app.register_blueprint(villeBluePrint)
 
 import random_city.errorsHandler.UserControllerErrorsHandler
-

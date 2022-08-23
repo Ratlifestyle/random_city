@@ -6,6 +6,8 @@ from sqlalchemy.orm import relationship
 from random_city import db
 from random_city.models.GameSession import GameSession
 from sqlalchemy.types import INTEGER
+
+
 class User(db.Model):
     __tablename__ = 'User'
     user_id = Column(INTEGER, primary_key=True)

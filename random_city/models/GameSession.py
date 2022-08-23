@@ -12,7 +12,7 @@ class GameSession(db.Model):
     result = Column(Integer)
     fk_user_id = Column(Integer, ForeignKey("User.user_id"), nullable=False)
     user = relationship("User", back_populates="game_sessions")
-    villes = relationship("Ville", back_populates="game_session")
+    ville = relationship("Ville", back_populates="game_session")
 
     def __init__(self, fk_user_id, is_active=0, dateStart=date.today(), duree="0", result=0):
         self.is_active = is_active
@@ -29,5 +29,5 @@ class GameSession(db.Model):
             "duree": self.duree,
             "result": self.result,
             "user": self.fk_user_id,
-            "ville": [ville.to_dict() for ville in self.villes]
+            "ville": self.ville
         }

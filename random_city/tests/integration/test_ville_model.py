@@ -22,6 +22,36 @@ class BaseTestVille(BaseTestCase):
             )),
             content_type='application/json',
         )
+
+    def startSession(self, user : User):
+        return self.client.get(
+            '/game_session/start',
+            headers=dict(
+                Authorization=user.encode_auth_token()
+            ),
+            content_type='application/json'
+        )
+
+    def endSession(self, session):
+        return self.client.get(
+            'game_session/end?game_session_id='+str(session['game_session_id']),
+            content_type='application/json'
+        )
+
+
+    def populate_user(self) -> User:
+        user = User('testFN', 'testLN', 'testPass', 'test@mail.fr', 'ratata')
+        self.register_user(user)
+        return User.query.filter_by(pseudo='ratata').first()
+
+
+    def getVille(self, session_id, latitude, longitude, distance='50') :
+        return self.client.get(
+            '/ville?game_session_id='+session_id+'&latitude='+latitude+'&longitude='+longitude+'&distance='+distance,
+            content_type='application/json'
+        )
+
+
     def setUp(self):
         super().setUp()
         user = User('testFN', 'testLN', 'testPass', 'test@mail.fr', 'ratata')
@@ -30,12 +60,9 @@ class BaseTestVille(BaseTestCase):
 class TestVille(BaseTestVille):
     def testGetVille(self):
         user = User.query.filter_by(pseudo='ratata').first()
-        auth_token = user.encode_auth_token()
-        response = self.client.get(
-            '/ville'+'?session_id=1&latitude=48.73&longitude=2.26',
-            headers=dict(
-                Authorization=auth_token
-            )
-        )
+        response = self.startSession(user)
+        self.assert200(response)
+        data = json.loads(response.data.decode())
+        response = self.getVille(str(data['result']['game_session_id']), '48.73', '2.26')
         print(response)
 

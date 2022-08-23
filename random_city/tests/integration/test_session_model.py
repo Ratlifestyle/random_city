@@ -23,13 +23,20 @@ class BaseTestSession(BaseTestCase):
             content_type='application/json',
         )
     def startSession(self, user : User):
-        return self.client.get(\
+        return self.client.get(
             '/game_session/start',
             headers=dict(
                 Authorization=user.encode_auth_token()
             ),
             content_type='application/json'
         )
+
+    def endSession(self, session):
+        return self.client.get(
+            'game_session/end?game_session_id='+str(session['game_session_id']),
+            content_type='application/json'
+        )
+
 
     def populate_user(self) -> User:
         user = User('testFN', 'testLN', 'testPass', 'test@mail.fr', 'ratata')
@@ -40,3 +47,14 @@ class TestSession(BaseTestSession):
     def test_start_session(self):
         user = self.populate_user()
         response = self.startSession(user)
+        self.assert200(response)
+        data = json.loads(response.data.decode())
+        self.assertEqual(data["result"]["is_active"], 1)
+    
+    def test_end_session(self):
+        user = self.populate_user()
+        response = self.startSession(user)
+        response = self.endSession(json.loads(response.data.decode())['result']) 
+        self.assert200(response)
+        data = json.loads(response.data.decode())
+        self.assertEqual(data['result']['is_active'], 0)

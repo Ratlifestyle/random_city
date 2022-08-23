@@ -14,7 +14,7 @@ class Ville(db.Model):
     codePostal = Column(Integer)
     street = Column(Text)
     fk_game_session_id = Column(Integer, ForeignKey("GameSession.game_session_id"))
-    game_session = relationship("GameSession", back_populates="villes")
+    game_session = relationship("GameSession", back_populates="ville")
 
     def __init__(self, name, latitude, longitude, distance, codePostal, fk_game_session_id, street=None):
         self.name = name
