@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey
-from sqlalchemy.orm import relationship, backref
 from random_city import db
 
 class DeviceLocation(db.Model):

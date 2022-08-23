@@ -1,7 +1,6 @@
 from random_city.tests.integration.Base import BaseTestCase
 from random_city.models.User import User
 import json
-import unittest
 
 class BaseTestVille(BaseTestCase):
     def register_user(self, user : User):

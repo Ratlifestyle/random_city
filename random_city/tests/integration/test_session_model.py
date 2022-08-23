@@ -1,5 +1,4 @@
 import json
-import unittest
 from random_city.tests.integration.Base import BaseTestCase
 from random_city.models.User import User
 

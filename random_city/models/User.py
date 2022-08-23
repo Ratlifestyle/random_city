@@ -4,7 +4,6 @@ import os
 from sqlalchemy import Column, Text
 from sqlalchemy.orm import relationship
 from random_city import db
-from random_city.models.GameSession import GameSession
 from sqlalchemy.types import INTEGER
 
 

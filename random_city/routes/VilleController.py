@@ -1,8 +1,6 @@
-from random_city import app, db
-from random_city.models.GameSession import GameSession
-from flask import Blueprint, jsonify, Response, request, make_response
+from random_city import db
+from flask import Blueprint, jsonify, request, make_response
 from random_city.randomCityGenerator import getRandomCity, getRandomStreet
-from random_city.models import Ville
 from random_city.exceptions.BadRequestException import BadRequestException
 
 
