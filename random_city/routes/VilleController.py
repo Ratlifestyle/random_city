@@ -12,11 +12,15 @@ def getVille():
     if 'game_session_id' in request.args and 'latitude' in request.args and 'longitude' in request.args:
         latitude = float(request.args['latitude'])
         longitude = float(request.args['longitude'])
-        if 'distance' in request.args:
-            distance = float(request.args['distance'])
+        if 'distanceMin' in request.args:
+            distanceMin = float(request.args['distanceMin'])
         else:   
-            distance = 50
-        ville = getRandomCity(latitude, longitude, distance)
+            distanceMin = 50
+        if 'distanceMax' in request.args:
+            distanceMax = float(request.args['distanceMax'])
+        else:   
+            distanceMax = 50
+        ville = getRandomCity(latitude, longitude, distanceMin, distanceMax)
         ville.fk_session_id = request.args['game_session_id']
         ville.street = getRandomStreet(ville)['properties']['label']
         db.session.add(ville)

@@ -29,5 +29,5 @@ class GameSession(db.Model):
             "duree": self.duree,
             "result": self.result,
             "user": self.fk_user_id,
-            "ville": self.ville
+            "ville": self.ville.to_dict()
         }

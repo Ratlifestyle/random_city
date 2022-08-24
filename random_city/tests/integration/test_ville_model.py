@@ -44,9 +44,9 @@ class BaseTestVille(BaseTestCase):
         return User.query.filter_by(pseudo='ratata').first()
 
 
-    def getVille(self, session_id, latitude, longitude, distance='50') :
+    def getVille(self, session_id, latitude, longitude, distanceMin='10', distanceMax='50') :
         return self.client.get(
-            '/ville?game_session_id='+session_id+'&latitude='+latitude+'&longitude='+longitude+'&distance='+distance,
+            '/ville?game_session_id='+session_id+'&latitude='+latitude+'&longitude='+longitude+'&distanceMin='+distanceMin+'&distanceMax='+distanceMax,
             content_type='application/json'
         )
 

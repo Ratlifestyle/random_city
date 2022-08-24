@@ -4,7 +4,7 @@ import requests
 from random_city.models.Ville import Ville
 from random_city.calculDistance import deg2rad, distanceGPS, rad2deg
 
-def get_liste_villes(latA, longA, distance):
+def get_liste_villes(latA, longA, distanceMin, distanceMax):
     conn = sqlite3.connect('data.sqlite')
     cursor = conn.execute("select ville_nom, ville_longitude_deg, ville_latitude_deg, ville_code_postal from villes_france_free")
     liste_villes = []
@@ -14,15 +14,15 @@ def get_liste_villes(latA, longA, distance):
         latB = deg2rad(float(row[2]))
         codePostal = row[3]
         distanceGps = distanceGPS(latA, longA, latB, longB)
-        if distanceGps <= distance*1000:
+        if distanceGps <= distanceMax*1000 and distanceGps >= distanceMin*1000:
             ville = Ville(nom, rad2deg(latB), rad2deg(longB), distanceGps, codePostal, None, None)
             liste_villes.append(ville)
     return liste_villes
 
-def getRandomCity(latitude, longitude, distance) -> Ville:
+def getRandomCity(latitude, longitude, distanceMin, distanceMax) -> Ville:
     latitude = deg2rad(latitude)
     longitude = deg2rad(longitude)
-    liste_villes = get_liste_villes(latitude, longitude, distance)
+    liste_villes = get_liste_villes(latitude, longitude, distanceMin, distanceMax)
     return random.choice(liste_villes)
 
 def getRandomStreet(city : Ville):

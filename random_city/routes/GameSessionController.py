@@ -3,6 +3,7 @@ from random_city.models.User import User
 from random_city.models.GameSession import GameSession
 from flask import Blueprint, jsonify, request, make_response
 from random_city.exceptions.BadRequestException import BadRequestException
+from random_city.randomCityGenerator import getRandomCity
 
 gameSessionBluePrint = Blueprint('GameSessionBluePrint', __name__)
 
@@ -20,6 +21,27 @@ def addSession():
         user = User.query.get(user_id)
         session = GameSession(user_id, 1)
         db.session.add(session)
+        ville = getRandomCity(request.args['latitude'], request.args['longitude'], request.args['distanceMin'], request.args['distanceMax'])
+        db.session.add(ville)
+        db.session.commit()
+        responseObject = {
+            'status': 'success',
+            'result': session.to_dict()
+        }
+        return make_response(jsonify(responseObject)), 200
+    else:
+        raise BadRequestException()
+
+
+@gameSessionBluePrint.route('/game_session/changeCity', methods=['GET'])
+def changeCitySession():
+    auth_token = request.headers.get('Authorization')
+    if auth_token:
+        user_id = User.decode_auth_token(auth_token)
+        user = User.query.get(user_id)
+        session= GameSession.query.get(request.args['game_session_id'])
+        ville = getRandomCity(request.args['latitude'], request.args['longitude'], request.args['distanceMin'], request.args['distanceMax'])
+        db.session.add(ville)
         db.session.commit()
         responseObject = {
             'status': 'success',
