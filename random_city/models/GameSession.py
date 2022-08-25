@@ -13,6 +13,7 @@ class GameSession(db.Model):
     fk_user_id = Column(Integer, ForeignKey("User.user_id"), nullable=False)
     user = relationship("User", back_populates="game_sessions")
     ville = relationship("Ville", back_populates="game_session")
+    device_location = relationship('DeviceLocation', back_populates='game_session')
 
     def __init__(self, fk_user_id, is_active=0, dateStart=date.today(), duree="0", result=0):
         self.is_active = is_active
